@@ -23,29 +23,38 @@
 		<th>작성자</th>
 		<th>작성일</th>
 	</tr>
-	<%
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		String DB_URL = "jdbc.mariadb://localhost:3306/board";
-		String DB_USER = "root";
-		String DB_PASSWORD = "1234";
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-			stmt = conn.createStatement();
-			String sql = "select * from content order by id asc";
-			rs = stmt.executeQuery(sql);
-		} catch (Exception e) {
-			out.println("DB 접속 에러");
-		}
-	%>
+<%
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet rs = null;
+	try {
+    	String jdbcUrl= "jdbc:mariadb://localhost:3306/board" ;
+		String dbId ="testuser";
+    	String dbPass= "qwer";
+ 
+        Class.forName( "org.mariadb.jdbc.Driver" );
+        conn=DriverManager.getConnection(jdbcUrl, dbId, dbPass);
+        out.println( "연결 성공!" );
+	} catch(Exception e) {
+    	e.printStackTrace();
+    	out.println( "몇시간을 먹는거냐!!!" );
+	}
+	stmt = conn.createStatement();
+	String sql = "SELECT * FROM content order by id asc";
+	rs = stmt.executeQuery(sql);
+%>
+<%
+	while(rs.next()) {
+%>
 	<tr>
-		<td>rs.getString("type")</td>
-		<td>rs.getString("title")</td>
-		<td>rs.getString("name")</td>
-		<td>rs.getString("date")</td>
+		<td><%= rs.getString("type") %></td>
+		<td><%= rs.getString("title") %></td>
+		<td><%= rs.getString("name") %></td>
+		<td><%= rs.getString("date") %></td>
 	</tr>
+<%
+	}
+%>
 </table>
 <div>
 	<button type="button">글 쓰기</button>
